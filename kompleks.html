@@ -1,0 +1,78 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Regresi Linear Kompleks</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+      text-align: center;
+    }
+    #container {
+      width: 400px;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <h1>Regresi Linear Kompleks</h1>
+    <label for="inputX">Masukkan Nilai X: </label>
+    <input type="text" id="inputX" placeholder="Nilai X" /><br><br>
+    <label for="inputY">Masukkan Nilai Y: </label>
+    <input type="text" id="inputY" placeholder="Nilai Y" /><br><br>
+    <button onclick="addData()">Tambah Data</button><br><br>
+    <button onclick="calculate()">Hitung Regresi</button><br><br>
+    <p>Prediksi Nilai Y: <span id="predictedValue"></span></p>
+  </div>
+
+  <script>
+    const dataX = [];
+    const dataY = [];
+
+    function addData() {
+      const inputX = parseFloat(document.getElementById("inputX").value);
+      const inputY = parseFloat(document.getElementById("inputY").value);
+
+      if (!isNaN(inputX) && !isNaN(inputY)) {
+        dataX.push(inputX);
+        dataY.push(inputY);
+        alert("Data ditambahkan!");
+      } else {
+        alert("Masukkan nilai yang valid!");
+      }
+
+      document.getElementById("inputX").value = "";
+      document.getElementById("inputY").value = "";
+    }
+
+    function calculate() {
+      const meanX = calculateMean(dataX);
+      const meanY = calculateMean(dataY);
+
+      const b1 = calculateB1(dataX, dataY, meanX, meanY);
+      const b0 = meanY - b1 * meanX;
+
+      const inputX = parseFloat(document.getElementById("inputX").value);
+
+      const predictedValue = b0 + b1 * inputX;
+      document.getElementById("predictedValue").textContent = predictedValue.toFixed(2);
+    }
+
+    function calculateMean(data) {
+      return data.reduce((acc, curr) => acc + curr, 0) / data.length;
+    }
+
+    function calculateB1(dataX, dataY, meanX, meanY) {
+      let numerator = 0;
+      let denominator = 0;
+
+      for (let i = 0; i < dataX.length; i++) {
+        numerator += (dataX[i] - meanX) * (dataY[i] - meanY);
+        denominator += Math.pow(dataX[i] - meanX, 2);
+      }
+
+      return numerator / denominator;
+    }
+  </script>
+</body>
+</html>

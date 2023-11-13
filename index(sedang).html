@@ -1,0 +1,67 @@
+<!DOCTYPE html>
+<html>
+<head>
+  <title>Prediksi Nilai Emas dalam Rupiah</title>
+  <style>
+    body {
+      font-family: Arial, sans-serif;
+    }
+    #container {
+      width: 400px;
+      margin: 0 auto;
+    }
+  </style>
+</head>
+<body>
+  <div id="container">
+    <h1>Prediksi Nilai Emas dalam Rupiah</h1>
+    <label for="inputDollar">Harga Emas (USD): </label>
+    <input type="text" id="inputDollar" placeholder="Masukkan harga emas dalam USD" /><br><br>
+    <label for="exchangeRate">Kurs Rupiah ke USD: </label>
+    <input type="text" id="exchangeRate" placeholder="Masukkan kurs Rupiah ke USD" /><br><br>
+    <button onclick="predictGoldValue()">Prediksi</button><br><br>
+    <p>Prediksi Nilai Emas dalam Rupiah: <span id="predictedValue"></span></p>
+  </div>
+
+  <script>
+    // Data latih (harga emas dalam beberapa periode waktu dalam USD)
+    const dataHargaEmasUSD = [1200, 1300, 1400, 1500, 1600, 1700, 1800];
+    const dataWaktu = [1, 2, 3, 4, 5, 6, 7];
+
+    function linearRegression(x, y, xValue) {
+      const n = x.length;
+      let sumX = 0;
+      let sumY = 0;
+      let sumXY = 0;
+      let sumXSquare = 0;
+
+      for (let i = 0; i < n; i++) {
+        sumX += x[i];
+        sumY += y[i];
+        sumXY += x[i] * y[i];
+        sumXSquare += x[i] * x[i];
+      }
+
+      const m = (n * sumXY - sumX * sumY) / (n * sumXSquare - sumX * sumX);
+      const b = (sumY - m * sumX) / n;
+
+      const predictedValue = (m * xValue + b) * parseFloat(document.getElementById("exchangeRate").value);
+
+      return predictedValue;
+    }
+
+    function predictGoldValue() {
+      const inputDollar = parseFloat(document.getElementById("inputDollar").value);
+
+      if (isNaN(inputDollar)) {
+        alert("Masukkan harga emas dalam USD yang valid.");
+        return;
+      }
+
+      const predictedValue = linearRegression(dataWaktu, dataHargaEmasUSD, dataWaktu.length + 1);
+
+      document.getElementById("predictedValue").textContent = predictedValue.toFixed(2) + " IDR";
+    }
+  </script>
+</body>
+</html>

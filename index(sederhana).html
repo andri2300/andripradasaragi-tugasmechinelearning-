@@ -1,0 +1,60 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Regresi Linier Penjualan Laptop</title>
+</head>
+<body>
+    <h1>Regresi Linier Penjualan Laptop</h1>
+
+    <div>
+        <label for="tahun">Tahun:</label>
+        <input type="text" id="tahun">
+    </div>
+
+    <div>
+        <label for="penjualan">Penjualan:</label>
+        <input type="text" id="penjualan">
+    </div>
+
+    <button onclick="hitungRegresiLinier()">Hitung Prediksi</button>
+
+    <h2>Prediksi Penjualan Laptop:</h2>
+    <p id="hasilPrediksi"></p>
+
+    <script>
+        // Data penjualan laptop (contoh data, seharusnya menggunakan data yang lebih nyata)
+        const dataPenjualan = [
+            { tahun: 2010, penjualan: 100 },
+            { tahun: 2011, penjualan: 110 },
+            { tahun: 2012, penjualan: 120 },
+            { tahun: 2013, penjualan: 130 },
+            { tahun: 2014, penjualan: 140 },
+            { tahun: 2015, penjualan: 150 },
+        ];
+
+        // Fungsi untuk menghitung regresi linier
+        function hitungRegresiLinier() {
+            const inputTahun = parseInt(document.getElementById("tahun").value);
+            let xTotal = 0;
+            let yTotal = 0;
+            let xyTotal = 0;
+            let xSquareTotal = 0;
+
+            for (const data of dataPenjualan) {
+                xTotal += data.tahun;
+                yTotal += data.penjualan;
+                xyTotal += data.tahun * data.penjualan;
+                xSquareTotal += data.tahun * data.tahun;
+            }
+
+            const n = dataPenjualan.length;
+            const a = (n * xyTotal - xTotal * yTotal) / (n * xSquareTotal - xTotal * xTotal);
+            const b = (yTotal - a * xTotal) / n;
+
+            const prediksiPenjualan = a * inputTahun + b;
+
+            document.getElementById("hasilPrediksi").textContent = `Prediksi penjualan laptop pada tahun ${inputTahun} adalah ${prediksiPenjualan}`;
+        }
+    </script>
+</body>
+</html>
